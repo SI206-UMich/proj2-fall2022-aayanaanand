@@ -114,7 +114,7 @@ def get_listing_information(listing_id):
     num_bedrooms = 0
     spans = soup.find_all("span")
     for span in spans:
-        if re.search("bedroom", span.text):
+        if re.search("(\d) bed", span.text):
             num_bedrooms = int(span.text[0])
             break
     #print(num_bedrooms)
@@ -139,7 +139,19 @@ def get_detailed_listing_database(html_file):
         ...
     ]
     """
-    pass
+    database = []
+
+    tcl = get_listings_from_search_results(html_file)
+    #print(tcl)
+
+    for tup in tcl:
+        pse = get_listing_information(tup[2])
+        listing = (tup[0], tup[1], tup[2], pse[0], pse[1], pse[2])
+        database.append(listing)
+    
+    return database
+
+    
 
 
 def write_csv(data, filename):
@@ -316,5 +328,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    unittest.main(verbosity=2)
-    #get_listing_information("6600081")
+    #unittest.main(verbosity=2)
+    get_detailed_listing_database("html_files/mission_district_search_results.html")
