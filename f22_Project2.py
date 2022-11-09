@@ -25,8 +25,41 @@ def get_listings_from_search_results(html_file):
         ('Loft in Mission District', 210, '1944564'),  # example
     ]
     """
-    pass
+    #using hardcoded path -- why doesn't it work without it???
 
+    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/html_files/"+html_file)
+    soup = BeautifulSoup(fhandle.read(), "html.parser")
+    fhandle.close()
+
+    titles = []
+    divs = soup.find_all("div", class_="t1jojoys dir dir-ltr")
+    for item in divs:
+        titles.append(item.text)
+    
+    costs = []
+    spans = soup.find_all("span", class_="_tyxjp1")
+    for item in spans:
+        costs.append(item.text.lstrip('$'))
+    
+    ids = []
+    urls = []
+    metas = soup.find_all("meta")
+    for meta in metas:
+        url = meta.get("itemprop")
+        if url == "url":
+            urls.append(meta.get("content"))
+    for url in urls:
+        lst = re.findall("www.airbnb.com/rooms/[plus/]*(\d+)", url)
+        for item in lst:
+            ids.append(item)
+    
+    listings = []
+    for x in range(len(titles)):
+        tup = (titles[x], costs[x], ids[x])
+        listings.append(tup)
+    
+    return listings
+            
 
 def get_listing_information(listing_id):
     """
@@ -242,4 +275,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    unittest.main(verbosity=2)
+    #unittest.main(verbosity=2)
+    get_listings_from_search_results("mission_district_search_results.html")
