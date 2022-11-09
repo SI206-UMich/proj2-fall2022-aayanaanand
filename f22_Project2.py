@@ -27,7 +27,7 @@ def get_listings_from_search_results(html_file):
     """
     #using hardcoded path -- why doesn't it work without it???
 
-    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/html_files/"+html_file)
+    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/"+html_file)
     soup = BeautifulSoup(fhandle.read(), "html.parser")
     fhandle.close()
 
@@ -55,7 +55,7 @@ def get_listings_from_search_results(html_file):
     
     listings = []
     for x in range(len(titles)):
-        tup = (titles[x], costs[x], ids[x])
+        tup = (titles[x], int(costs[x]), ids[x])
         listings.append(tup)
     
     return listings
@@ -180,11 +180,16 @@ class TestCases(unittest.TestCase):
         # check that the variable you saved after calling the function is a list
         self.assertEqual(type(listings), list)
         # check that each item in the list is a tuple
-
+        for item in listings:
+            self.assertEqual(type(item), tuple)
         # check that the first title, cost, and listing id tuple is correct (open the search results html and find it)
-
+        self.assertEqual(listings[0][0], "Loft in Mission District")
+        self.assertEqual(listings[0][1], 210)
+        self.assertEqual(listings[0][2], "1944564")
         # check that the last title is correct (open the search results html and find it)
-        pass
+        self.assertEqual(listings[19][0], "Guest suite in Mission District")
+        self.assertEqual(listings[19][1], 238)
+        self.assertEqual(listings[19][2], "32871760")
 
     def test_get_listing_information(self):
         html_list = ["1623609",
@@ -275,5 +280,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    #unittest.main(verbosity=2)
-    get_listings_from_search_results("mission_district_search_results.html")
+    unittest.main(verbosity=2)
+    #get_listings_from_search_results("mission_district_search_results.html")
