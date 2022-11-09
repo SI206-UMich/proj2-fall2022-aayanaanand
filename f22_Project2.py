@@ -96,19 +96,20 @@ def get_listing_information(listing_id):
             lst = re.findall("Policy number: (.+)", li.text)
             policy_number = lst[0]
             break;
-    print(policy_number)
+    #print(policy_number)
 
     place_type = ""
     h2s = soup.find_all("h2", class_="_14i3z6h")
     for h2 in h2s:
         subtitle = h2.text
-        if re.search("private", subtitle):
+        if re.search("[pP]rivate", subtitle):
             place_type = "Private Room"
-        elif re.search("shared", subtitle):
+        elif re.search("[sS]hared", subtitle):
             place_type = "Shared Room"
         else:
             place_type = "Entire Room"
-    print(place_type)
+        break
+    #print(place_type)
 
     num_bedrooms = 0
     spans = soup.find_all("span")
@@ -116,6 +117,7 @@ def get_listing_information(listing_id):
         if re.search("bedroom", span.text):
             num_bedrooms = int(span.text[0])
             break
+    #print(num_bedrooms)
     
     tup = (policy_number, place_type, num_bedrooms)
     return tup
@@ -247,12 +249,11 @@ class TestCases(unittest.TestCase):
             # check that the third element in the tuple is an int
             self.assertEqual(type(listing_information[2]), int)
         # check that the first listing in the html_list has policy number 'STR-0001541'
-
+        self.assertEqual(listing_informations[0][0], "STR-0001541")
         # check that the last listing in the html_list is a "Private Room"
-
+        self.assertEqual(listing_informations[4][1], "Private Room")
         # check that the third listing has one bedroom
-
-        pass
+        self.assertEqual(listing_informations[2][2], 1)
 
     def test_get_detailed_listing_database(self):
         # call get_detailed_listing_database on "html_files/mission_district_search_results.html"
@@ -315,5 +316,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    #unittest.main(verbosity=2)
-    get_listing_information("1944564")
+    unittest.main(verbosity=2)
+    #get_listing_information("6600081")
