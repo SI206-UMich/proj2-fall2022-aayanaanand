@@ -85,7 +85,42 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
-    pass
+    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/html_files/listing_"+listing_id+".html")
+    soup = BeautifulSoup(fhandle.read(), "html.parser")
+    fhandle.close()
+
+    policy_number = ""
+    lis = soup.find_all("li", class_="f19phm7j dir dir-ltr")
+    for li in lis:
+        if li.text.startswith("Policy number:"):
+            lst = re.findall("Policy number: (.+)", li.text)
+            policy_number = lst[0]
+            break;
+    print(policy_number)
+
+    place_type = ""
+    h2s = soup.find_all("h2", class_="_14i3z6h")
+    for h2 in h2s:
+        subtitle = h2.text
+        if re.search("private", subtitle):
+            place_type = "Private Room"
+        elif re.search("shared", subtitle):
+            place_type = "Shared Room"
+        else:
+            place_type = "Entire Room"
+    print(place_type)
+
+    num_bedrooms = 0
+    spans = soup.find_all("span")
+    for span in spans:
+        if re.search("bedroom", span.text):
+            num_bedrooms = int(span.text[0])
+            break
+    
+    tup = (policy_number, place_type, num_bedrooms)
+    return tup
+
+
 
 
 def get_detailed_listing_database(html_file):
@@ -280,5 +315,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    unittest.main(verbosity=2)
-    #get_listings_from_search_results("mission_district_search_results.html")
+    #unittest.main(verbosity=2)
+    get_listing_information("1944564")
