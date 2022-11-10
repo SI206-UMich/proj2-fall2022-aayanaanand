@@ -219,7 +219,7 @@ def check_policy_numbers(data):
             if re.search("20\d{2}-00\d{4}STR", tup[3]) or re.search("STR-000\d{4}", tup[3]):
                 continue
             else:
-                invalids.append(tup[3])
+                invalids.append(tup[2])
     
     return invalids
 
@@ -353,15 +353,15 @@ class TestCases(unittest.TestCase):
         # check that the return value is a list
         self.assertEqual(type(invalid_listings), list)
         # check that there is exactly one element in the string
-
+        self.assertEqual(len(invalid_listings), 1)
         # check that the element in the list is a string
-
+        self.assertEqual(type(invalid_listings[0]), str)
         # check that the first element in the list is '16204265'
-        pass
+        self.assertEqual(invalid_listings[0], '16204265')
 
 
 if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    #unittest.main(verbosity=2)
+    unittest.main(verbosity=2)
