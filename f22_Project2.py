@@ -92,10 +92,15 @@ def get_listing_information(listing_id):
     policy_number = ""
     lis = soup.find_all("li", class_="f19phm7j dir dir-ltr")
     for li in lis:
-        if li.text.startswith("Policy number:"):
+        if re.search("Policy number: (.+)", li.text):
             lst = re.findall("Policy number: (.+)", li.text)
-            policy_number = lst[0]
-            break;
+            if re.search("[pP]ending", lst[0]):
+                policy_number = "Pending"
+            elif re.search("\w+-\d", lst[0]):
+                policy_number = lst[0]
+            else:
+                policy_number = "Exempt"
+            break
     #print(policy_number)
 
     place_type = ""
@@ -176,7 +181,12 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    fhandle = open(filename, "w")
+    fhandle.write("Listing Title,Cost,Listing ID,Policy Number,Place Type,Number of Bedrooms\n")
+
+    sorted_data = sorted(data, key=lambda x: x[1])
+    print(sorted_data)
+
 
 
 def check_policy_numbers(data):
@@ -327,5 +337,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    unittest.main(verbosity=2)
-    #get_detailed_listing_database("html_files/mission_district_search_results.html")
+    #unittest.main(verbosity=2)
+    get_detailed_listing_database("html_files/mission_district_search_results.html")
