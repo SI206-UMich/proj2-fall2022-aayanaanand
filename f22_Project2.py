@@ -314,12 +314,26 @@ class TestCases(unittest.TestCase):
         # check that there are 21 lines in the csv
         self.assertEqual(len(csv_lines), 21)
         # check that the header row is correct
-
+        self.assertEqual(csv_lines[0][0], "Listing Title")
+        self.assertEqual(csv_lines[0][1], "Cost")
+        self.assertEqual(csv_lines[0][2], "Listing ID")
+        self.assertEqual(csv_lines[0][3], "Policy Number")
+        self.assertEqual(csv_lines[0][4], "Place Type")
+        self.assertEqual(csv_lines[0][5], "Number of Bedrooms")
         # check that the next row is Private room in Mission District,82,51027324,Pending,Private Room,1
-
+        self.assertEqual(csv_lines[1][0], "Private room in Mission District")
+        self.assertEqual(csv_lines[1][1], "82")
+        self.assertEqual(csv_lines[1][2], "51027324")
+        self.assertEqual(csv_lines[1][3], "Pending")
+        self.assertEqual(csv_lines[1][4], "Private Room")
+        self.assertEqual(csv_lines[1][5], "1")
         # check that the last row is Apartment in Mission District,399,28668414,Pending,Entire Room,2
-
-        pass
+        self.assertEqual(csv_lines[-1][0], "Apartment in Mission District")
+        self.assertEqual(csv_lines[-1][1], "399")
+        self.assertEqual(csv_lines[-1][2], "28668414")
+        self.assertEqual(csv_lines[-1][3], "Pending")
+        self.assertEqual(csv_lines[-1][4], "Entire Room")
+        self.assertEqual(csv_lines[-1][5], "2")
 
     def test_check_policy_numbers(self):
         # call get_detailed_listing_database on "html_files/mission_district_search_results.html"
@@ -341,5 +355,5 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    #unittest.main(verbosity=2)
-    get_detailed_listing_database("html_files/mission_district_search_results.html")
+    unittest.main(verbosity=2)
+    #get_detailed_listing_database("html_files/mission_district_search_results.html")
