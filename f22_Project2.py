@@ -96,7 +96,7 @@ def get_listing_information(listing_id):
             lst = re.findall("Policy number: (.+)", li.text)
             if re.search("[pP]ending", lst[0]):
                 policy_number = "Pending"
-            elif re.search("\w+-\d", lst[0]):
+            elif re.search("\d+", lst[0]):
                 policy_number = lst[0]
             else:
                 policy_number = "Exempt"
@@ -212,7 +212,16 @@ def check_policy_numbers(data):
     ]
 
     """
-    pass
+    invalids = []
+
+    for tup in data:
+        if tup[3] != "Pending" and tup[3] != "Exempt":
+            if re.search("20\d{2}-00\d{4}STR", tup[3]) or re.search("STR-000\d{4}", tup[3]):
+                continue
+            else:
+                invalids.append(tup[3])
+    
+    return invalids
 
 
 def extra_credit(listing_id):
@@ -355,5 +364,4 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    unittest.main(verbosity=2)
-    #get_detailed_listing_database("html_files/mission_district_search_results.html")
+    #unittest.main(verbosity=2)
