@@ -185,7 +185,11 @@ def write_csv(data, filename):
     fhandle.write("Listing Title,Cost,Listing ID,Policy Number,Place Type,Number of Bedrooms\n")
 
     sorted_data = sorted(data, key=lambda x: x[1])
-    print(sorted_data)
+    for tup in sorted_data:
+        fhandle.write(tup[0] + "," + str(tup[1]) + "," + tup[2]+ "," + tup[3]+ "," + tup[4]+ "," + str(tup[5]))
+        fhandle.write("\n")
+    
+    fhandle.close()
 
 
 
