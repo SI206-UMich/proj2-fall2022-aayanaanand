@@ -101,7 +101,6 @@ def get_listing_information(listing_id):
             else:
                 policy_number = "Exempt"
             break
-    #print(policy_number)
 
     place_type = ""
     h2s = soup.find_all("h2", class_="_14i3z6h")
@@ -114,7 +113,6 @@ def get_listing_information(listing_id):
         else:
             place_type = "Entire Room"
         break
-    #print(place_type)
 
     num_bedrooms = 0
     spans = soup.find_all("span")
@@ -122,7 +120,6 @@ def get_listing_information(listing_id):
         if re.search("(\d) bed", span.text):
             num_bedrooms = int(span.text[0])
             break
-    #print(num_bedrooms)
     
     tup = (policy_number, place_type, num_bedrooms)
     return tup
@@ -147,7 +144,6 @@ def get_detailed_listing_database(html_file):
     database = []
 
     tcl = get_listings_from_search_results(html_file)
-    #print(tcl)
 
     for tup in tcl:
         pse = get_listing_information(tup[2])
@@ -384,5 +380,4 @@ if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
-    #unittest.main(verbosity=2)
-    #print(extra_credit("1944564"))
+    unittest.main(verbosity=2)
