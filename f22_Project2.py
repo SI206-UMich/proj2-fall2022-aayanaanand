@@ -25,10 +25,8 @@ def get_listings_from_search_results(html_file):
         ('Loft in Mission District', 210, '1944564'),  # example
     ]
     """
-    #using hardcoded path -- why doesn't it work without it???
-
-    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/"+html_file)
-    soup = BeautifulSoup(fhandle.read(), "html.parser")
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), html_file), 'r') as fhandle:
+        soup = BeautifulSoup(fhandle.read(), "html.parser")
     fhandle.close()
 
     titles = []
@@ -85,8 +83,8 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
-    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/html_files/listing_"+listing_id+".html")
-    soup = BeautifulSoup(fhandle.read(), "html.parser")
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "html_files/listing_"+listing_id+".html"), 'r') as fhandle:
+        soup = BeautifulSoup(fhandle.read(), "html.parser")
     fhandle.close()
 
     policy_number = ""
@@ -234,8 +232,8 @@ def extra_credit(listing_id):
     gone over their 90 day limit, else return True, indicating the lister has
     never gone over their limit.
     """
-    fhandle = open("/users/harva1/desktop/si 206/proj2-fall2022-aayanaanand/html_files/listing_"+listing_id+"_reviews.html")
-    soup = BeautifulSoup(fhandle.read(), "html.parser")
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "html_files/listing_"+listing_id+"_reviews.html"), 'r') as fhandle:
+        soup = BeautifulSoup(fhandle.read(), "html.parser")
     fhandle.close()
 
     reviews = {} #keys are "month year" and values are counts
